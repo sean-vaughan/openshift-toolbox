@@ -1,0 +1,21 @@
+#!/bin/bash
+
+OCP_VER="${OCP_VER:-latest}"
+ARCH="${ARCH:-}"
+BIN_DIR="${BIN_DIR:-/usr/local/bin}"
+
+mkdir -p "$BIN_DIR"
+cd "$BIN_DIR" || exit 1
+
+if [ ! -e /usr/local/bin/helm ]
+then
+  for tarball in ccoctl-linux.tar.gz \
+      openshift-client-linux"${ARCH}".tar.gz \
+      opm-linux.tar.gz
+  do
+    curl https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/${OCP_VER}/${tarball} | tar -zxvf -
+  done
+
+  curl https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/helm/latest/helm-linux-"${ARCH:-amd64}".tar.gz | tar --no-same-owner -zxvf -
+  mv helm-linux-"${ARCH:-amd64}" helm
+fi

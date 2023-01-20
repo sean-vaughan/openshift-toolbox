@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Set your manifest name
+export MANIFEST_NAME="multiarch-manifest"
+
+# Set the required variables
+export BUILD_PATH="."
+export REGISTRY="docker.io"
+export USER="dharmabruce"
+export IMAGE_NAME="base-shell"
+export IMAGE_TAG="dev"
+
+# Remove any previous manifest
+buildah manifest rm ${MANIFEST_NAME}
+
+# Create a multi-architecture manifest
+buildah manifest create ${MANIFEST_NAME}
+
+# Build your arm64 architecture container
+buildah bud \
+    --tag "${REGISTRY}/${USER}/${IMAGE_NAME}:${IMAGE_TAG}" \
+    --manifest ${MANIFEST_NAME} \
+    --platform linux/arm64 \
+    --jobs=4 \
+    ${BUILD_PATH}
+
+# Build your amd64 architecture container
+buildah bud \
+    --tag "${REGISTRY}/${USER}/${IMAGE_NAME}:${IMAGE_TAG}" \
+    --manifest ${MANIFEST_NAME} \
+    --platform linux/amd64 \
+    --jobs=4 \
+    ${BUILD_PATH}
+
+# Push the full manifest, with both CPU Architectures
+buildah manifest push --all \
+    ${MANIFEST_NAME} \
+    "docker://${REGISTRY}/${USER}/${IMAGE_NAME}:${IMAGE_TAG}"
