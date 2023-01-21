@@ -10,7 +10,6 @@ export USER="dharmabruce"
 export IMAGE_NAME="base-shell"
 export IMAGE_TAG="dev"
 
-# Remove any previous manifest
 buildah manifest rm ${MANIFEST_NAME}
 
 # Create a multi-architecture manifest
@@ -20,7 +19,7 @@ buildah manifest create ${MANIFEST_NAME}
 buildah bud \
     --tag "${REGISTRY}/${USER}/${IMAGE_NAME}:${IMAGE_TAG}" \
     --manifest ${MANIFEST_NAME} \
-    --platform linux/arm64 \
+    --platform linux/arm64/v8 \
     --jobs=4 \
     ${BUILD_PATH}
 

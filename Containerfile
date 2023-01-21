@@ -1,29 +1,43 @@
-FROM --platform=linux/amd64 docker.io/library/ubuntu:22.10
-FROM --platform=linux/arm64 docker.io/arm64v8/ubuntu:22.10
+FROM quay.io/toolbx-images/ubuntu-toolbox:22.10
 
 LABEL com.github.containers.toolbox="true"
 
-RUN apt-get update && apt-get install -y locales zsh tmux htop git powerline dnsutils \
-  curl iproute2 tcpdump buildah rsync sudo diffutils less bc procps libvshadow-utils \
-	util-linux libvte-common wget vim \
-	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ENV LANG en_US.utf8
 
-RUN apt clean all
-RUN rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y locales \
+	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
+	bc \
+	curl \
+	dnsutils \
+	git \
+	gnupg \
+	htop \
+	iproute2 \
+	jq \
+	less \
+	libvshadow-utils \
+	libvte-common \
+	nmap \
+	powerline \
+	rsync \
+	silversearcher-ag \
+	sudo \
+	tcpdump \
+	tmux \
+	vim \
+	wget \
+	yamllint \
+	zsh \
+	zsh-autosuggestions \
+	zsh-syntax-highlighting \
+	&& rm -rf /var/lib/apt/lists/*
 
-
-ENV CONF /usr/local/share/base-shell
-RUN mkdir "${CONF}"
-
-COPY zshrc "${CONF}/zshrc"
-COPY powerlevel10k "${CONF}/powerlevel10k"
-COPY p10k.zsh "${CONF}"
-COPY tmux.conf "${CONF}"
-
+ADD p10k.zsh /etc/zsh
+ADD tmux.conf /etc
 
 ADD install-openshift-clients /usr/local/bin
-ADD install /usr/local/bin
 
+COPY zshrc /etc/zsh/newuser.zshrc.recommended
 
-ENTRYPOINT /usr/local/bin/install
+ENTRYPOINT /usr/bin/zsh
