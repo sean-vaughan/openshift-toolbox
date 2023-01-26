@@ -39,5 +39,3 @@ ADD tmux.conf /etc
 ADD install-openshift-clients /usr/local/bin
 
 COPY zshrc /etc/zsh/newuser.zshrc.recommended
-
-ENTRYPOINT /usr/bin/zsh
