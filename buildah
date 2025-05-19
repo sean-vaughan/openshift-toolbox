@@ -5,9 +5,9 @@ export MANIFEST_NAME="multiarch-manifest"
 
 # Set the required variables
 export BUILD_PATH="."
-export REGISTRY="docker.io"
-export USER="dharmabruce"
-export IMAGE_NAME="base-shell"
+export REGISTRY="quay.io"
+export USER="svaughan"
+export IMAGE_NAME="openshift-toolbox"
 export IMAGE_TAG="dev"
 
 buildah manifest rm ${MANIFEST_NAME}

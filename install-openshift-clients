@@ -17,10 +17,6 @@ done
 ( curl https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/helm/latest/helm-linux"${ARCH:-amd64}".tar.gz | tar --no-same-owner -zxvf -
 mv helm-linux"${ARCH:-amd64}" helm )&
 
-ln -s /usr/bin/distrobox-host-exec /usr/local/bin/podman
-ln -s /usr/bin/distrobox-host-exec /usr/local/bin/buildah
-ln -s /usr/bin/distrobox-host-exec /usr/local/bin/docker
-
 wait
 
 for tool in podman oc helm

@@ -23,7 +23,6 @@ configure_ohmyzsh() {
 
   HIST_STAMPS="yyyy-mm-dd"
   plugins+=(
-    ag
     ansible
     encode64
     git

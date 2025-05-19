@@ -1,41 +1,46 @@
-FROM quay.io/toolbx-images/ubuntu-toolbox:22.10
+FROM registry.redhat.io/rhel9/support-tools:latest
 
 LABEL com.github.containers.toolbox="true"
 
 ENV LANG en_US.utf8
 
-RUN apt-get update && apt-get install -y locales \
-	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
+# RUN curl -ko /etc/pki/rpm-gpg/RPM-GPG-KEY-galaxy4 https://galaxy4.net/repo/RPM-GPG-KEY-galaxy4
+# RUN yum install -y http://galaxy4.net/repo/galaxy4-release-9-current.noarch.rpm
+
+RUN dnf update -y && dnf install -y \
+  podman \
+  skopeo \
+  buildah \
+	zsh \
+	# zsh-autosuggestions \
+	# zsh-syntax-highlighting \
 	bc \
-	curl \
+	# curl \
 	dnsutils \
 	git \
 	gnupg \
-	htop \
-	iproute2 \
+	# htop \
+	# iproute2 \
 	jq \
 	less \
-	libvshadow-utils \
-	libvte-common \
 	nmap \
-	powerline \
+	# powerline \
 	rsync \
-	silversearcher-ag \
+	# silversearcher-ag \
 	sudo \
 	tcpdump \
-	tmux \
+	# tmux \
 	vim \
 	wget \
-	yamllint \
-	zsh \
-	zsh-autosuggestions \
-	zsh-syntax-highlighting \
-	&& rm -rf /var/lib/apt/lists/*
+	# yamllint \
+  && dnf clean all
 
-ADD p10k.zsh /etc/zsh
+RUN mkdir -p /etc/zsh
+ADD zshrc /etc/zsh/newuser.zshrc.recommended
+ADD p10k.zsh /etc/zsh/p10k.zsh
+
 ADD tmux.conf /etc
 
 ADD install-openshift-clients /usr/local/bin
 
-COPY zshrc /etc/zsh/newuser.zshrc.recommended
+CMD [ "/usr/bin/zsh" ]
