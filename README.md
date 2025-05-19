@@ -1,5 +1,5 @@
 
-# distrobox Usage
+# toolbox Usage
 
     toolbox create -i savughan/openshift-toolbox -n ocp-tools
     toolbox enter ocp-tools
